@@ -5,6 +5,7 @@ import { BookOpen } from "lucide-react";
 import { IconBadge } from "@/components/icon-badge";
 import { formatPrice } from "@/lib/format";
 import { CourseProgress } from "@/components/course-progress";
+import { card_items } from '@/Dummy/card_items'
 
 interface CourseCardProps {
   id: string;
