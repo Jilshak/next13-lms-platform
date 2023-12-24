@@ -15,7 +15,7 @@ export const SingInForm = () => {
         if (username && password) {
             if (passwordRegex.test(password)) {
                 alert(`This is the username and password: ${username}, ${password}`)
-            }else{
+            } else {
                 alert("The password doesn't seem to have the required characters within it.")
             }
         } else {
@@ -25,28 +25,31 @@ export const SingInForm = () => {
 
     return (
         <>
-            <div className="min-h-screen w-[100vw] max-w-screen  bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                    <img className="mx-auto h-10 w-auto" src="https://www.svgrepo.com/show/301692/login.svg" alt="Workflow" />
-                    <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
-                        Welcome, We missed you
-                    </h2>
-                    <p className="mt-2 text-center text-sm leading-5 text-gray-500 max-w">
+            <div className="min-h-screen w-[100vw] max-w-screen  bg-gray-50 dark:bg-[#020817] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
 
-                        <p
-                            className="font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:underline transition ease-in-out duration-150">
-                            there is a lot of catching up to do
+                <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md shadow-lg dark:shadow-md dark:border-2 dark:border-[#0369A1] dark:shadow-[#0369A1]  rounded-lg  flex flex-col">
+                    <div className="sm:mx-auto sm:w-full sm:max-w-md mt-3 pt-5">
+
+                        <img className="mx-auto h-10 w-auto" src="https://www.svgrepo.com/show/301692/login.svg" alt="Workflow" />
+
+
+                        <h2 className="mt-6 text-center text-2xl leading-9 font-extrabold text-gray-900 dark:text-white">
+                            Welcome, We've missed you
+                        </h2>
+                        <p className="mt-2 text-center text-sm leading-5 text-gray-500 max-w">
+
+                            <p
+                                className="font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+                                there is a lot of catching up to do
+                            </p>
                         </p>
-                    </p>
-                </div>
-
-                <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                    <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+                    </div>
+                    <div className="bg-white dark:bg-[#020817] py-8 px-4  sm:rounded-lg sm:px-10">
                         <form method="POST" action="#">
                             <div>
-                                <label htmlFor="email" className="block text-sm font-medium leading-5  text-gray-700">Username</label>
+                                <label htmlFor="email" className="block text-sm font-medium leading-5 dark:text-white  text-gray-700">Mobile</label>
                                 <div className="mt-1 relative rounded-md shadow-sm">
-                                    <input onChange={(e) => setUsername(e.target.value)} id="name" name="name" placeholder="John Doe" type="text" className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                                    <input onChange={(e) => setUsername(e.target.value)} placeholder="Enter your number" type="number" className="appearance-none dark:bg-[#020817] focus:border-blue-300  block w-full px-3 py-2 border border-grey-300 rounded-md focus:outline-none transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
                                     <div className="hidden absolute inset-y-0 right-0 pr-3  items-center pointer-events-none">
                                         <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                                             <path fillRule="evenodd"
@@ -59,11 +62,16 @@ export const SingInForm = () => {
                             </div>
 
                             <div className="mt-6">
-                                <label htmlFor="password" className="block text-sm font-medium leading-5 text-gray-700">
+                                <label htmlFor="password" className="block text-sm font-medium leading-5 text-gray-700 dark:text-white">
                                     Password
                                 </label>
                                 <div className="mt-1 rounded-md shadow-sm">
-                                    <input onChange={(e) => setPassword(e.target.value)} id="password" name="password" type="password" className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                                    <input onChange={(e) => setPassword(e.target.value)} placeholder="*******" id="password" name="password" type="password" className="appearance-none block w-full px-3 py-2 border dark:bg-[#020817] rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                                    <div className="flex items-center justify-end w-full text-xs my-2 ">
+                                        <p className="hover:text-[#0369A1] cursor-pointer">
+                                            Forgot Password ?
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -71,13 +79,13 @@ export const SingInForm = () => {
 
                             <div className="mt-6">
                                 <span className="block w-full rounded-md shadow-sm">
-                                    <Button onClick={handleLogin} className="w-full bg-blue-500 hover:bg-blue-600">
+                                    <Button onClick={handleLogin} className="w-full dark:text-white bg-blue-500 hover:bg-blue-600 dark:bg-[#0369A1] dark:hover:bg-[#0369A1]">
                                         Login
                                     </Button>
                                 </span>
                                 <span className="block w-full rounded-md shadow-sm my-3">
                                     <Link href='sign-up'>
-                                        <Button className="w-full bg-red-500 hover:bg-red-600">
+                                        <Button className="w-full dark:text-white bg-red-500 hover:bg-red-600 dark:bg-gray-600 dark:hover:bg-gray-700">
                                             Register
                                         </Button>
                                     </Link>
