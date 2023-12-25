@@ -83,9 +83,11 @@ export const SingInForm = () => {
                                 <div className="mt-1 rounded-md shadow-sm">
                                     <input onChange={(e) => setPassword(e.target.value)} placeholder="*******" id="password" name="password" type="password" className="appearance-none block w-full px-3 py-2 border dark:bg-[#020817] rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
                                     <div className="flex items-center justify-end w-full text-xs my-2 ">
-                                        <p className="hover:text-[#2b4467] text-[#3B82F6] cursor-pointer">
-                                            Forgot Password ?
-                                        </p>
+                                        <Link href={'/forgot-pass'}>
+                                            <p className="hover:text-[#2b4467] text-[#3B82F6] cursor-pointer">
+                                                Forgot Password ?
+                                            </p>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
