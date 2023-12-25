@@ -33,23 +33,6 @@ export default function OTPForm() {
 
     return (
         <div>
-            {/* <input
-                type="text"
-                placeholder="Phone Number"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-            <button onClick={() => sendOtp()}>Send OTP</button>
-
-            <input
-                type="text"
-                placeholder="OTP"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-            />
-            <button onClick={verifyOtp}>Verify OTP</button>
-
-            <p>{message}</p> */}
             <SingUpForm />
         </div>
     );
