@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { CheckCircle, Clock } from "lucide-react";
-
+import { DashboardItems } from '@/Dummy/dashboard_items'
 import { getDashboardCourses } from "@/actions/get-dashboard-courses";
 import { CoursesList } from "@/components/courses-list";
 
@@ -13,10 +13,12 @@ export default async function Dashboard() {
     return redirect("/");
   }
 
-  const {
-    completedCourses,
-    coursesInProgress
-  } = await getDashboardCourses(userId);
+  // const {
+  //   completedCourses,
+  //   coursesInProgress
+  // } = await getDashboardCourses(userId);
+
+  const dashboardItems = DashboardItems
 
   return (
     <div className="p-6 space-y-4">
@@ -24,17 +26,17 @@ export default async function Dashboard() {
        <InfoCard
           icon={Clock}
           label="In Progress"
-          numberOfItems={coursesInProgress.length}
+          numberOfItems={dashboardItems.length}
        />
        <InfoCard
           icon={CheckCircle}
           label="Completed"
-          numberOfItems={completedCourses.length}
+          numberOfItems={dashboardItems.length}
           variant="success"
        />
       </div>
       <CoursesList
-        items={[...coursesInProgress, ...completedCourses]}
+        items={[...dashboardItems]}
       />
     </div>
   )
