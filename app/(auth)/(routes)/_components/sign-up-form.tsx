@@ -5,55 +5,89 @@ import { useState } from "react";
 import { OtpForm } from "./otp-form";
 import Link from "next/link";
 import axios from 'axios';
+import toast from "react-hot-toast";
+import { useTheme } from "next-themes";
 
-interface SingUpFormProps {
-    mobile: Number;
-    username: string;
-    password: string;
-}
+
 
 export const SingUpForm = () => {
 
     const [username, setUsername] = useState<string>('')
-    const [mobileNumber, setMobileNumber] = useState<string>('+91')
+    const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [password, setPassword] = useState<string>('')
     const [conformPassword, setConfirmPassword] = useState<string>('')
+
+    const [userId, setUserId] = useState<string>('');
+    const theme = useTheme();
 
     const [toggle, setToggle] = useState(false)
 
     const handleInputFields = () => {
         const mobileRegex = /^\+91\d{10}$/; // corrected here
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (username && mobileNumber && password === conformPassword) {
-            let new_number = '+91' + mobileNumber
+        if (username && phoneNumber && password === conformPassword) {
+            let new_number = '+91' + phoneNumber
             if (mobileRegex.test(new_number)) { // corrected here
                 if (passwordRegex.test(password)) {
                     return true
                 } else {
-                    alert('Your password does not follow the pattern required, it should have a capital, small, a number and a special character')
+
+                    toast.error('Your password does not follow the pattern required, it should have a capital, small, a number and a special character', {
+                        position: 'top-right',
+                        className: 'dark:bg-[#141E36]  rounded-lg',
+                        style: {
+                            color: theme.theme == 'dark' ? '#fff' : '#000'
+                        }
+                    });
                 }
             } else {
-                alert('There seem to be something wrong with your mobile number please check again')
+                toast.error('There seem to be something wrong with your mobile number please check again', {
+                    position: 'top-right',
+                    className: 'dark:bg-[#141E36]  rounded-lg',
+                    style: {
+                        color: theme.theme == 'dark' ? '#fff' : '#000'
+                    }
+                });
             }
         } else {
-            alert("either the passwords are not matching or the username field and mobile fields are empty")
+            toast.error('either the passwords are not matching or the username field and mobile fields are empty', {
+                position: 'top-right',
+                className: 'dark:bg-[#141E36]  rounded-lg',
+                style: {
+                    color: theme.theme == 'dark' ? '#fff' : '#000'
+                }
+            });
+
         }
     }
 
-    const handleUserDetails = () => {
-
-    }
-
-
     const handleSendOTP = async (e: any) => {
-        // const verify = handleInputFields()
-        const request = await axios.post('/api/auth/register', { username: username, password: password })
-        const response = request.data
-        console.log("This is the response: ", response)
-        // verify && setToggle(!toggle)
-        return response
-
+        const verify = handleInputFields()
+        if (verify) {
+            try {
+                const createUser = await axios.post('/api/user', { mobile: phoneNumber, username: username, password: password })
+                if (createUser.status == 201) {
+                    const userId = await createUser.data.user.id
+                    setUserId(userId)
+                    const request = await axios.post('/api/send-otp', { phoneNumber: `+91${phoneNumber}` });
+                    if (request.status == 200) {
+                        verify && setToggle(!toggle)
+                    } else {
+                        alert("The otp service is down for the moment")
+                    }
+                }
+            } catch (error) {
+                toast.error('A user with the given phone number already exists!!', {
+                    position: 'top-right',
+                    className: 'dark:bg-[#141E36]  rounded-lg',
+                    style: {
+                        color: theme.theme == 'dark' ? '#fff' : '#000'
+                    }
+                });
+            }
+        }
     }
+
 
     return (
         <>
@@ -91,7 +125,7 @@ export const SingUpForm = () => {
                                     <span className="inline-flex h-10 items-center px-3 rounded-l-md border border-r-0  dark:bg-[#141e36]  bg-gray-50 dark:text-white  text-gray-500 sm:text-sm">
                                         +91
                                     </span>
-                                    <input maxLength={10} onChange={(e) => setMobileNumber(e.target.value)} placeholder="Mobile Number" type="text" className="flex-1 border-2 focus:outline-none focus:border-blue-300 dark:bg-[#020817] form-input pl-3 block w-full rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                                    <input maxLength={10} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="Mobile Number" type="text" className="flex-1 border-2 focus:outline-none focus:border-blue-300 dark:bg-[#020817] form-input pl-3 block w-full rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
                                 </div>
                             </div>
 
@@ -109,7 +143,7 @@ export const SingUpForm = () => {
                                     Confirm Password
                                 </label>
                                 <div className="mt-1 rounded-md shadow-sm">
-                                    <input onChange={(e) => setConfirmPassword(e.target.value)} id="password_confirmation"  name="password_confirmation" type="password" className="appearance-none dark:bg-[#020817] block w-full px-3 py-2 border  rounded-md  focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                                    <input onChange={(e) => setConfirmPassword(e.target.value)} id="password_confirmation" name="password_confirmation" type="password" className="appearance-none dark:bg-[#020817] block w-full px-3 py-2 border  rounded-md  focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
                                 </div>
                             </div>
 
@@ -136,7 +170,7 @@ export const SingUpForm = () => {
             {
                 toggle &&
                 <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-                    <OtpForm phoneNumber={mobileNumber} username={username} password={password} />
+                    <OtpForm phoneNumber={phoneNumber} username={username} password={password} userId={userId} />
                 </div>
             }
         </>

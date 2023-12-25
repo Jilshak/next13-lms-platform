@@ -3,23 +3,40 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Link from "next/link";
+import { signIn } from 'next-auth/react'
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { useTheme } from "next-themes";
+import { cookies } from "next/headers";
+import axios from 'axios'
 
 export const SingInForm = () => {
 
-    const [username, setUsername] = useState<string>('')
+    const [mobile, setMobile] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+    const router = useRouter()
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const theme = useTheme()
 
-    const handleLogin = () => {
-        if (username && password) {
-            if (passwordRegex.test(password)) {
-                alert(`This is the username and password: ${username}, ${password}`)
-            } else {
-                alert("The password doesn't seem to have the required characters within it.")
+
+    const handleLogin = async (e: any) => {
+        try {
+            e.preventDefault()
+
+            const request = await axios.post('api/auth/login', { mobile: mobile, password: password })
+            console.log("This is the request: ", request)
+            if (request?.status === 200) {
+                router.push('/')
             }
-        } else {
-            alert("one of the required field is missing")
+        } catch (error) {
+            toast.error('Invalid Credentials Please try again', {
+                position: 'top-right',
+                className: 'dark:bg-[#141E36]  rounded-lg',
+                style: {
+                    color: theme.theme == 'dark' ? '#fff' : '#000'
+                }
+            });
+            console.log("Error: ", error)
         }
     }
 
@@ -36,28 +53,26 @@ export const SingInForm = () => {
                         <h2 className="mt-6 text-center text-2xl leading-9 font-extrabold text-gray-900 dark:text-white">
                             Welcome, We've missed you
                         </h2>
-                        <p className="mt-2 text-center text-sm leading-5 text-gray-500 max-w">
+                        <div className="mt-2 text-center text-sm leading-5 text-gray-500 max-w">
 
                             <p
                                 className="font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:underline transition ease-in-out duration-150">
                                 there is a lot of catching up to do
                             </p>
-                        </p>
+                        </div>
                     </div>
                     <div className="bg-white dark:bg-[#020817] py-8 px-4  sm:rounded-lg sm:px-10">
-                        <form method="POST" action="#">
-                            <div>
-                                <label htmlFor="email" className="block text-sm font-medium leading-5 dark:text-white  text-gray-700">Mobile</label>
-                                <div className="mt-1 relative rounded-md shadow-sm">
-                                    <input onChange={(e) => setUsername(e.target.value)} placeholder="Enter your number" type="number" className="appearance-none dark:bg-[#020817] focus:border-blue-300  block w-full px-3 py-2 border border-grey-300 rounded-md focus:outline-none transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
-                                    <div className="hidden absolute inset-y-0 right-0 pr-3  items-center pointer-events-none">
-                                        <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd"
-                                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                                clipRule="evenodd">
-                                            </path>
-                                        </svg>
-                                    </div>
+                        <form  >
+
+
+                            <div className="mt-6">
+                                <label htmlFor="username" className="block text-sm font-medium leading-5 text-gray-700 dark:text-white">Mobile Number</label>
+                                <div className="mt-1 flex rounded-md shadow-sm">
+
+                                    <span className="inline-flex h-10 items-center px-3 rounded-l-md border border-r-0  dark:bg-[#141e36]  bg-gray-50 dark:text-white  text-gray-500 sm:text-sm">
+                                        +91
+                                    </span>
+                                    <input maxLength={10} onChange={(e) => setMobile(e.target.value)} placeholder="Enter Your Mobile Number" type="text" className="flex-1 border-2 focus:outline-none focus:border-blue-300 dark:bg-[#020817] form-input pl-3 block w-full rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
                                 </div>
                             </div>
 
@@ -79,7 +94,7 @@ export const SingInForm = () => {
 
                             <div className="mt-6">
                                 <span className="block w-full rounded-md shadow-sm">
-                                    <Button onClick={handleLogin} className="w-full dark:text-white bg-blue-500 hover:bg-blue-600 dark:bg-[#0369A1] dark:hover:bg-[#0369A1]">
+                                    <Button onClick={(e) => handleLogin(e)} className="w-full dark:text-white bg-blue-500 hover:bg-blue-600 dark:bg-[#0369A1] dark:hover:bg-[#0369A1]">
                                         Login
                                     </Button>
                                 </span>

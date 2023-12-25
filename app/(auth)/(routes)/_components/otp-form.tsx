@@ -2,20 +2,87 @@
 
 import Link from "next/link"
 import { useRef, useState } from "react"
+import axios from 'axios'
+import { useRouter } from "next/navigation"
+import toast from "react-hot-toast"
+import { useTheme } from "next-themes";
+import OtpTimer from 'otp-timer'
 
 interface OtpInterface {
     phoneNumber: string
     username: string
     password: string
+    userId: string
 }
 
 export const OtpForm = ({
     phoneNumber,
+    username,
+    password,
+    userId
 }: OtpInterface) => {
 
     // new 
     const [state, setState] = useState(Array(6).fill(''));
     const inputRefs = Array.from({ length: 6 }).map(() => useRef<HTMLInputElement | null>(null));
+
+    const [message, setMessage] = useState<string>('');
+    const router = useRouter()
+    const theme = useTheme();
+
+
+
+    const handleVerifyToken = async () => {
+        const final_otp = state.join('')
+        if (final_otp.length == 6) {
+            await verifyOtp()
+            router.push('sign-in')
+        } else {
+            toast.error('Some field of the OTP seems to be missing', {
+                position: 'top-right',
+                className: 'dark:bg-[#141E36]  rounded-lg',
+                style: {
+                    color: theme.theme == 'dark' ? '#fff' : '#000'
+                }
+            });
+        }
+    }
+
+    // to verify the otp send
+    const verifyOtp = async () => {
+        try {
+            console.log("This is the phone number and code: ", phoneNumber, state.join(''))
+            const response = await axios.post('/api/verify-otp', { phoneNumber: phoneNumber, code: state.join('') });
+            console.log(response)
+            if (response.status == 200) {
+                const verify = await axios.patch('/api/user', { data: { verified: true } })
+                if (verify.status === 200) {
+                    toast.success('Your OTP has been verified', {
+                        position: 'top-right',
+                        className: 'dark:bg-[#141E36]  rounded-lg',
+                        style: {
+                            color: theme.theme == 'dark' ? '#fff' : '#000'
+                        }
+                    });
+                }
+            } else {
+                // const response = await axios.delete('api/user', { data: { userId: userId } })
+                toast.error('Invalid OTP please try again!!', {
+                    position: 'top-right',
+                    className: 'dark:bg-[#141E36]  rounded-lg',
+                    style: {
+                        color: theme.theme == 'dark' ? '#fff' : '#000'
+                    }
+                });
+
+            }
+            setMessage(response.data.message);
+
+        } catch (error: any) {
+            setMessage(error.response.data.message);
+        }
+    };
+
 
 
     const handleChange = (e: any, i: any) => {
@@ -27,24 +94,14 @@ export const OtpForm = ({
         });
 
         if (value && i < 5 && inputRefs[i + 1] && inputRefs[i + 1].current) {
-            inputRefs[i + 1].current.focus(); // Focus on the next field after entering a value
+            inputRefs[i + 1].current!.focus(); // Focus on the next field after entering a value
         }
     };
 
 
-
-    const handleVerifyToken = () => {
-        const final_otp = state.join('')
-        if (final_otp.length == 6) {
-            alert(final_otp)
-        } else {
-            alert("fill the entire field of the otp")
-        }
-    }
-
     return (
-        <div className="relative flex  flex-col justify-center overflow-hidden bg-[#F9FAFB] py-28 px-24">
-            <div className="relative bg-white px-6 pt-10 pb-9 border-1 shadow-md mx-auto w-full max-w-lg rounded-2xl">
+        <div className="relative flex  flex-col justify-center overflow-hidden bg-[#F9FAFB] dark:bg-[#020817]  py-28 px-24">
+            <div className="relative bg-white dark:bg-[#020817] dark:border-2 dark:shadow-[#0369A1] dark:border-[#0369A1] px-6 pt-10 pb-9 border-1 shadow-md mx-auto w-full max-w-lg rounded-2xl">
                 <div className="mx-auto flex w-full max-w-md flex-col space-y-16">
                     <div className="flex flex-col items-center justify-center text-center space-y-2">
                         <div className="font-semibold text-3xl">
@@ -66,7 +123,7 @@ export const OtpForm = ({
                                                 maxLength={1}
                                                 value={s}
                                                 onChange={(e) => handleChange(e, i)}
-                                                className="w-full h-full flex flex-col items-center justify-center text-center outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
+                                                className="w-full h-full flex flex-col items-center justify-center text-center outline-none rounded-xl border border-gray-200 text-lg bg-white dark:bg-[#020817]  focus:bg-gray-50 focus:ring-1 ring-blue-700"
                                                 type="text"
                                             />
                                         </div>
@@ -81,7 +138,7 @@ export const OtpForm = ({
                                     </div>
 
                                     <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
-                                        <p>Didn't recieve code?</p> <a className="flex flex-row items-center text-blue-600" href="http://" target="_blank" rel="noopener noreferrer">Resend</a>
+                                        <p>Didn't recieve code?</p><OtpTimer resend={handleVerifyToken} background={theme.theme == 'dark' ? "#020817" : "#fff"} text=' ' textColor={theme.theme == 'dark' ? '#ffff' : '#000'} seconds={60} />
                                     </div>
                                     <div className="flex items-center justify-center">
                                         <Link href={`sign-in`}>

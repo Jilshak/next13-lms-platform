@@ -17,6 +17,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
 
 export const NavbarRoutes = () => {
   const userId = '1';
@@ -28,14 +32,30 @@ export const NavbarRoutes = () => {
   const isCoursePage = pathname?.includes("/courses");
   const isSearchPage = pathname === "/search";
 
+  const { push } = useRouter()
+
+  const Logout = async (event: any) => {
+    event.stopPropagation();
+    try {
+      const request = await axios.post('api/auth/logout')
+      console.log("This is from the logout: ", request)
+      if (request.status == 200) {
+        console.log("You have been loggedout")
+        push('/sign-in')
+      }
+    } catch (error) {
+      console.log("Error: ", error)
+    }
+  }
+
   return (
     <>
       {isSearchPage && (
-        <div className="hidden md:block">
+        <div className="hidden md:block ">
           <SearchInput />
         </div>
       )}
-      <div className="flex gap-x-2 ml-auto">
+      <div className="flex gap-x-6 ml-auto  items-center">
         {isTeacherPage || isCoursePage ? (
           <Link href="/">
             <Button size="sm" variant="ghost">
@@ -70,6 +90,29 @@ export const NavbarRoutes = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <DropdownMenuContent align="center">
+              <DropdownMenuItem>
+                test1
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                test2
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                test3
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                test4
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenuTrigger>
+        </DropdownMenu>
+        <LogOut className="cursor-pointer hover:text-red-400" onClick={Logout} />
       </div>
     </>
   )

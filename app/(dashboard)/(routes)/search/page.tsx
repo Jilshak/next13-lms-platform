@@ -9,6 +9,8 @@ import { CoursesList } from "@/components/courses-list";
 import { Categories } from "./_components/categories";
 import { card_items as courses } from '@/Dummy/card_items'
 
+
+
 interface SearchPageProps {
   searchParams: {
     title: string;
@@ -30,6 +32,7 @@ const SearchPage = async ({
       name: "asc"
     }
   });
+
 
   // const courses = await getCourses({
   //   userId,
