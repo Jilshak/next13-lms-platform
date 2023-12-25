@@ -89,7 +89,7 @@ export const SingInForm = () => {
 
                             <div className="mt-6">
                                 <span className="block w-full rounded-md shadow-sm">
-                                    <Button onClick={(e) => handleLogin(e)} className="w-full dark:text-white bg-blue-500 hover:bg-blue-600 dark:bg-[#0369A1] dark:hover:bg-[#0369A1]">
+                                    <Button onClick={(e) => handleLogin(e)} className="w-full dark:text-white bg-blue-500 hover:bg-blue-600 dark:bg-[#0369A1] dark:hover:bg-[#00264D]">
                                         Login
                                     </Button>
                                 </span>

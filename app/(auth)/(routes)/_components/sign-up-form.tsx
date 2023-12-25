@@ -126,7 +126,7 @@ export const SingUpForm = () => {
 
                             <div className="mt-6">
                                 <span className="block w-full rounded-md shadow-sm">
-                                    <Button onClick={handleSendOTP} className="w-full bg-blue-500 hover:bg-blue-600 dark:bg-[#0369A1] dark:text-white">
+                                    <Button onClick={handleSendOTP} className="w-full bg-blue-500 hover:bg-blue-600 dark:bg-[#0369A1] dark:hover:bg-[#00264D] dark:text-white">
                                         Send Otp
                                     </Button>
                                 </span>
