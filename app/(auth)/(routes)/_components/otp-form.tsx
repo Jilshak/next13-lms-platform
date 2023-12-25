@@ -6,7 +6,7 @@ import axios from 'axios'
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 import { useTheme } from "next-themes";
-import OtpTimer from 'otp-timer'
+import { Otptimer } from "otp-timer-ts";
 
 interface OtpInterface {
     phoneNumber: string
@@ -40,9 +40,9 @@ export const OtpForm = ({
         } else {
             toast.error('Some field of the OTP seems to be missing', {
                 position: 'top-right',
-                className: 'dark:bg-[#141E36]  rounded-lg',
+                className: 'dark:bg-[#141E36] bg-[blue]  rounded-lg',
                 style: {
-                    color: theme.theme == 'dark' ? '#fff' : '#000'
+                    color: theme.theme == 'dark' ? '#fff' : '#000000'
                 }
             });
         }
@@ -52,10 +52,11 @@ export const OtpForm = ({
     const verifyOtp = async () => {
         try {
             console.log("This is the phone number and code: ", phoneNumber, state.join(''))
-            const response = await axios.post('/api/verify-otp', { phoneNumber: phoneNumber, code: state.join('') });
+            const response = await axios.post('/api/verify-otp', { phoneNumber: '+91' + phoneNumber, code: state.join('') });
             console.log(response)
             if (response.status == 200) {
-                const verify = await axios.patch('/api/user', { data: { verified: true } })
+                console.log("This is the userId: ", userId)
+                const verify = await axios.patch('/api/user', { verified: true, userId: userId })
                 if (verify.status === 200) {
                     toast.success('Your OTP has been verified', {
                         position: 'top-right',
@@ -138,7 +139,7 @@ export const OtpForm = ({
                                     </div>
 
                                     <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
-                                        <p>Didn't recieve code?</p><OtpTimer resend={handleVerifyToken} background={theme.theme == 'dark' ? "#020817" : "#fff"} text=' ' textColor={theme.theme == 'dark' ? '#ffff' : '#000'} seconds={60} />
+                                        <p>Didn't recieve code?</p><Otptimer text="" onResend={handleVerifyToken} seconds={60} />
                                     </div>
                                     <div className="flex items-center justify-center">
                                         <Link href={`sign-in`}>

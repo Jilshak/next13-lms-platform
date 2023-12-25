@@ -43,7 +43,7 @@ export async function POST(req: Request) {
             }
         )
 
-        if (passwordMatch) {
+        if (passwordMatch && existingUserByMobile.verified) {
             const serialized = serialize('oursitejwt', token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',

@@ -48,7 +48,7 @@
     "next": "13.4.12",
     "next-themes": "^0.2.1",
     "node-gyp": "^10.0.1",
-    "otp-timer": "^1.1.5",
+    "otp-timer-ts": "^3.0.1",
     "postcss": "8.4.29",
     "query-string": "^8.1.0",
     "react": "18.2.0",

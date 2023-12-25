@@ -82,13 +82,18 @@ export async function DELETE(req: Request) {
 
 export async function PATCH(req: Request) {
     try {
+        console.log("Hello world!!!")
         const body = await req.json()
         const { userId } = body
 
+        console.log("This is the userId from the patch request: ", userId)
         // check if user exists 
         const existingUser = await db.user.findUnique({
             where: { id: userId }
         });
+
+
+        console.log("This si the existing user from the patch requst: ", existingUser)
 
         if (!existingUser) {
             return NextResponse.json({

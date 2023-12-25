@@ -68,7 +68,7 @@ export const SingUpForm = () => {
                 const createUser = await axios.post('/api/user', { mobile: phoneNumber, username: username, password: password })
                 if (createUser.status == 201) {
                     const userId = await createUser.data.user.id
-                    setUserId(userId)
+                    await setUserId(userId)
                     const request = await axios.post('/api/send-otp', { phoneNumber: `+91${phoneNumber}` });
                     if (request.status == 200) {
                         verify && setToggle(!toggle)
