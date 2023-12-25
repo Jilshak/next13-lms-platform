@@ -1,8 +1,10 @@
+'use client'
+
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { card_items } from '@/Dummy/card_items'
 
-const CourseIdPage = async ({
+const CourseIdPage =  ({
   params
 }: {
   params: { courseId: string; }
