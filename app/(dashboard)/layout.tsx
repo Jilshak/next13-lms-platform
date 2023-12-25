@@ -23,7 +23,7 @@ const DashboardLayout = ({
            transition={{ type: 'easeInOut', duration: 0.8 }}
           >
 
-            <div className="h-full">
+            <div className="h-full ">
               <div className="h-[80px] md:pl-56 fixed inset-y-0 w-full z-50">
                 <Navbar />
 

@@ -18,14 +18,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning={true}>
       <ThemeProvider
         attribute='class'
         defaultTheme='system'
         enableSystem
         disableTransitionOnChange
       >
-        <body className={inter.className}>
+        <body className={`${inter.className} scrollbar-thin hover:scrollbar-thumb-[#0075af] scrollbar-thumb-rounded scrollbar-thumb-[#76c8ff]  dark:scrollbar-thumb-[#0284C7]`}>
           <ConfettiProvider />
           <ToastProvider />
           {children}
