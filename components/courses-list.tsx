@@ -23,11 +23,12 @@ export const CoursesList = ({
       <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
         {items.map((item) => (
           <motion.div
-          variants={{
-            initial: { rotateY: 0, transform: 'translateY(0)' },
-            whileHover: { rotateY: 5, transform: 'translateY(-5px)' },
-          }}
-        >
+            variants={{
+              initial: { border: '2px solid #ccc' },
+              animate: { border: '2px solid #333' },
+            }}
+            animate={"pulse"} // Custom animation with Framer Motion's animate API
+          >
             <CourseCard
               key={item.id}
               id={item.id}

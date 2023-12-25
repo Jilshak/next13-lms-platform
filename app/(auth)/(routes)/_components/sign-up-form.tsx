@@ -155,7 +155,7 @@ export const SingUpForm = () => {
                                 </span>
                                 <span className="block w-full rounded-md shadow-sm mt-2">
                                     <Link href={`sign-in`}>
-                                        <Button className="w-full bg-red-500 dark:text-white hover:bg-red-600 dark:dark:bg-gray-600 dark:hover:bg-slate-700">
+                                        <Button className="w-full dark:text-white bg-green-500 hover:bg-green-600 dark:dark:bg-gray-600 dark:hover:bg-slate-700">
                                             Already have an account? Login
                                         </Button>
                                     </Link>

@@ -5,21 +5,21 @@ import { db } from "@/lib/db";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/columns";
 
-const CoursesPage = async () => {
+const CoursesPage =  () => {
   const userId = '1';
 
   if (!userId) {
     return redirect("/");
   }
 
-  const courses = await db.course.findMany({
-    where: {
-      userId,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  // const courses = await db.course.findMany({
+  //   where: {
+  //     userId,
+  //   },
+  //   orderBy: {
+  //     createdAt: "desc",
+  //   },
+  // });
 
   return ( 
     <div className="p-6">

@@ -57,7 +57,7 @@ export const SingInForm = () => {
 
                             <p
                                 className="font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:underline transition ease-in-out duration-150">
-                                there is a lot of catching up to do
+                                There is a lot of catching up to do...
                             </p>
                         </div>
                     </div>
@@ -83,7 +83,7 @@ export const SingInForm = () => {
                                 <div className="mt-1 rounded-md shadow-sm">
                                     <input onChange={(e) => setPassword(e.target.value)} placeholder="*******" id="password" name="password" type="password" className="appearance-none block w-full px-3 py-2 border dark:bg-[#020817] rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
                                     <div className="flex items-center justify-end w-full text-xs my-2 ">
-                                        <p className="hover:text-[#0369A1] cursor-pointer">
+                                        <p className="hover:text-[#2b4467] text-[#3B82F6] cursor-pointer">
                                             Forgot Password ?
                                         </p>
                                     </div>
@@ -100,7 +100,7 @@ export const SingInForm = () => {
                                 </span>
                                 <span className="block w-full rounded-md shadow-sm my-3">
                                     <Link href='sign-up'>
-                                        <Button className="w-full dark:text-white bg-red-500 hover:bg-red-600 dark:bg-gray-600 dark:hover:bg-gray-700">
+                                        <Button className="w-full dark:text-white bg-green-500 hover:bg-green-600 dark:bg-gray-600 dark:hover:bg-gray-700">
                                             Register
                                         </Button>
                                     </Link>
