@@ -1,5 +1,6 @@
 "use client"
 
+import { useCustomToast } from "@/components/custom/custom-toast";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useTheme } from "next-themes";
@@ -17,6 +18,8 @@ const ResetPasswordForm = ({
 
     const theme = useTheme()
     const { push } = useRouter()
+
+    const customToast = useCustomToast()
 
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
@@ -45,40 +48,16 @@ const ResetPasswordForm = ({
                             push('sign-in')
                         }
                     } else {
-                        toast.error('The otp provided is Invalid', {
-                            position: 'top-right',
-                            className: 'dark:bg-[#141E36]  rounded-lg',
-                            style: {
-                                color: theme.theme == 'dark' ? '#fff' : '#000'
-                            }
-                        });
+                        customToast({message: "The otp provided is Invalid"})
                     }
                 } else {
-                    toast.error('The otp provided are wrong please try again', {
-                        position: 'top-right',
-                        className: 'dark:bg-[#141E36]  rounded-lg',
-                        style: {
-                            color: theme.theme == 'dark' ? '#fff' : '#000'
-                        }
-                    });
+                    customToast({message: "The otp provided are wrong please try again"})
                 }
             } else {
-                toast.error('The password should atleast contain one uppercase one lower case 1 number and 1 special character', {
-                    position: 'top-right',
-                    className: 'dark:bg-[#141E36]  rounded-lg',
-                    style: {
-                        color: theme.theme == 'dark' ? '#fff' : '#000'
-                    }
-                });
+                customToast({message: "The password should atleast contain one uppercase one lower case 1 number and 1 special character"})
             }
         } else {
-            toast.error('The passwords does not match one another please check', {
-                position: 'top-right',
-                className: 'dark:bg-[#141E36]  rounded-lg',
-                style: {
-                    color: theme.theme == 'dark' ? '#fff' : '#000'
-                }
-            });
+            customToast({message: 'The passwords does not match one another please check'})
         }
     }
 

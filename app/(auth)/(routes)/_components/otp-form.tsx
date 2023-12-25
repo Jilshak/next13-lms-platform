@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 import { useTheme } from "next-themes";
 import { Otptimer } from "otp-timer-ts";
+import { useCustomToast } from "@/components/custom/custom-toast"
 
 interface OtpInterface {
     phoneNumber: string
@@ -30,7 +31,7 @@ export const OtpForm = ({
     const router = useRouter()
     const theme = useTheme();
 
-
+    const customToast = useCustomToast()
 
     const handleVerifyToken = async () => {
         const final_otp = state.join('')
@@ -38,24 +39,16 @@ export const OtpForm = ({
             await verifyOtp()
             router.push('sign-in')
         } else {
-            toast.error('Some field of the OTP seems to be missing', {
-                position: 'top-right',
-                className: 'dark:bg-[#141E36] bg-[blue]  rounded-lg',
-                style: {
-                    color: theme.theme == 'dark' ? '#fff' : '#000000'
-                }
-            });
+            customToast({message: 'Some field of the OTP seems to be missing'})
         }
     }
 
     // to verify the otp send
     const verifyOtp = async () => {
         try {
-            console.log("This is the phone number and code: ", phoneNumber, state.join(''))
             const response = await axios.post('/api/verify-otp', { phoneNumber: '+91' + phoneNumber, code: state.join('') });
             console.log(response)
             if (response.status == 200) {
-                console.log("This is the userId: ", userId)
                 const verify = await axios.patch('/api/user', { verified: true, userId: userId })
                 if (verify.status === 200) {
                     toast.success('Your OTP has been verified', {
@@ -67,15 +60,7 @@ export const OtpForm = ({
                     });
                 }
             } else {
-                // const response = await axios.delete('api/user', { data: { userId: userId } })
-                toast.error('Invalid OTP please try again!!', {
-                    position: 'top-right',
-                    className: 'dark:bg-[#141E36]  rounded-lg',
-                    style: {
-                        color: theme.theme == 'dark' ? '#fff' : '#000'
-                    }
-                });
-
+                customToast({message: 'Invalid OTP please try again!!'})
             }
             setMessage(response.data.message);
 

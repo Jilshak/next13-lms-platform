@@ -7,6 +7,7 @@ import Link from "next/link";
 import axios from 'axios';
 import toast from "react-hot-toast";
 import { useTheme } from "next-themes";
+import { useCustomToast } from "@/components/custom/custom-toast";
 
 
 
@@ -16,6 +17,8 @@ export const SingUpForm = () => {
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [password, setPassword] = useState<string>('')
     const [conformPassword, setConfirmPassword] = useState<string>('')
+
+    const toast = useCustomToast()
 
     const [userId, setUserId] = useState<string>('');
     const theme = useTheme();
@@ -31,33 +34,13 @@ export const SingUpForm = () => {
                 if (passwordRegex.test(password)) {
                     return true
                 } else {
-
-                    toast.error('Your password does not follow the pattern required, it should have a capital, small, a number and a special character', {
-                        position: 'top-right',
-                        className: 'dark:bg-[#141E36]  rounded-lg',
-                        style: {
-                            color: theme.theme == 'dark' ? '#fff' : '#000'
-                        }
-                    });
+                    toast({ message: 'Your password does not follow the pattern required, it should have a capital, small, a number and a special character' })
                 }
             } else {
-                toast.error('There seem to be something wrong with your mobile number please check again', {
-                    position: 'top-right',
-                    className: 'dark:bg-[#141E36]  rounded-lg',
-                    style: {
-                        color: theme.theme == 'dark' ? '#fff' : '#000'
-                    }
-                });
+                toast({ message: 'There seem to be something wrong with your mobile number please check again' })
             }
         } else {
-            toast.error('either the passwords are not matching or the username field and mobile fields are empty', {
-                position: 'top-right',
-                className: 'dark:bg-[#141E36]  rounded-lg',
-                style: {
-                    color: theme.theme == 'dark' ? '#fff' : '#000'
-                }
-            });
-
+            toast({ message: 'either the passwords are not matching or the username field and mobile fields are empty' })
         }
     }
 
@@ -73,17 +56,11 @@ export const SingUpForm = () => {
                     if (request.status == 200) {
                         verify && setToggle(!toggle)
                     } else {
-                        alert("The otp service is down for the moment")
+                        toast({message: "The otp service is down for the moment"})
                     }
                 }
             } catch (error) {
-                toast.error('A user with the given phone number already exists!!', {
-                    position: 'top-right',
-                    className: 'dark:bg-[#141E36]  rounded-lg',
-                    style: {
-                        color: theme.theme == 'dark' ? '#fff' : '#000'
-                    }
-                });
+                toast({message: 'A user with the given phone number already exists!!'})
             }
         }
     }

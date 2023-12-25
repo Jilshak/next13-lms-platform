@@ -3,12 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Link from "next/link";
-import { signIn } from 'next-auth/react'
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useTheme } from "next-themes";
-import { cookies } from "next/headers";
 import axios from 'axios'
+import { useCustomToast } from '@/components/custom/custom-toast'
 
 export const SingInForm = () => {
 
@@ -16,7 +15,7 @@ export const SingInForm = () => {
     const [password, setPassword] = useState<string>('')
     const router = useRouter()
 
-    const theme = useTheme()
+    const toast = useCustomToast()
 
 
     const handleLogin = async (e: any) => {
@@ -29,13 +28,7 @@ export const SingInForm = () => {
                 router.push('/')
             }
         } catch (error) {
-            toast.error('Invalid Credentials Please try again', {
-                position: 'top-right',
-                className: 'dark:bg-[#141E36]  rounded-lg',
-                style: {
-                    color: theme.theme == 'dark' ? '#fff' : '#000'
-                }
-            });
+            toast({message: 'Invalid Credentials Please try again'})
             console.log("Error: ", error)
         }
     }

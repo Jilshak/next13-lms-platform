@@ -7,6 +7,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import ResetPasswordForm from "./reset-pass-form";
 import Link from "next/link";
+import { useCustomToast } from "@/components/custom/custom-toast";
 
 
 const ForgotPasswordForm = () => {
@@ -14,8 +15,9 @@ const ForgotPasswordForm = () => {
     const [mobile, setMobile] = useState<string>('')
     const [toggle, setToggle] = useState<boolean>(false)
 
+    const customToast = useCustomToast()
+
     const theme = useTheme()
-    // for mobile number validation
     const mobileRegex = /^\+91\d{10}$/; // corrected here
 
     const handleSendMobile = async (e: any) => {
@@ -29,22 +31,10 @@ const ForgotPasswordForm = () => {
                     setToggle(true)
                 }
             } else {
-                toast.error('There is something wrong with your mobile number!!! Please check again', {
-                    position: 'top-right',
-                    className: 'dark:bg-[#141E36]  rounded-lg',
-                    style: {
-                        color: theme.theme == 'dark' ? '#fff' : '#000'
-                    }
-                });
+                customToast({message: 'There is something wrong with your mobile number!!! Please check again'})
             }
         } catch (error) {
-            toast.error('There is something wrong with your request!!! Please check again', {
-                position: 'top-right',
-                className: 'dark:bg-[#141E36]  rounded-lg',
-                style: {
-                    color: theme.theme == 'dark' ? '#fff' : '#000'
-                }
-            });
+            customToast({message: 'There is something wrong with your request!!! Please check again'})
         }
     }
 
