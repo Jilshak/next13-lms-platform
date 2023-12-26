@@ -9,7 +9,7 @@ interface loginProps {
 const login = async ({ mobile, password }: loginProps) => {
     try {
         const response = await apiService.post('api/auth/login', { mobile: mobile, password: password });
-        return response.data;
+        return response;
     } catch (error) {
         console.error(error);
         throw error;

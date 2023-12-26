@@ -23,9 +23,8 @@ export async function POST(req: Request) {
 
 
         // changed to argon hashing
-        const hashedPassword = await argon2.hash(password);
-        
-
+        const salt = Buffer.from('this_is_static_salt');
+        const hashedPassword = await argon2.hash(password, { salt });
 
 
         const newUser = await db.user.create({

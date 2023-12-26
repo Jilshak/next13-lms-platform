@@ -7,7 +7,6 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
     try {
-        console.log("This is being called!!")
         const body = await req.json()
         const { mobile, password } = body
 
@@ -50,7 +49,7 @@ export async function POST(req: Request) {
             }
         )
 
-        if (passwordMatch && existingUserByMobile.verified) {
+        if (passwordMatch && !existingUserByMobile.verified) {
             const serialized = serialize('oursitejwt', token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
