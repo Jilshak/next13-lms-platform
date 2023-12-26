@@ -82,7 +82,6 @@ export async function DELETE(req: Request) {
 
 export async function PATCH(req: Request) {
     try {
-        console.log("Hello world!!!")
         const body = await req.json()
         const { userId } = body
 

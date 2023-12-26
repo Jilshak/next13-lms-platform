@@ -2,7 +2,7 @@
 
 import { useCustomToast } from "@/components/custom/custom-toast";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
+import { UpdatePassword, VerifyOtp } from "@/service/axios-services/dataFetching";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -32,11 +32,9 @@ const ResetPasswordForm = ({
         if (password === confirmPassword) {
             if (passwordRegex.test(password)) {
                 if (code && otpRegex.test(code)) {
-                    const verify_otp = await axios.post('/api/verify-otp', { phoneNumber: '+91' + mobile, code: code })
-                    console.log("Passed the Second request")
+                    const verify_otp = await VerifyOtp(`+91${mobile}`, code)
                     if (verify_otp.status == 200) {
-                        const update_password = await axios.patch('api/auth/forgotpassword', { mobile: mobile, password: password })
-                        console.log("Passed the third request")
+                        const update_password = await UpdatePassword(mobile, password)
                         if (update_password.status == 200) {
                             await toast.success('Your Password has been reset!!', {
                                 position: 'top-right',
@@ -48,16 +46,16 @@ const ResetPasswordForm = ({
                             push('sign-in')
                         }
                     } else {
-                        customToast({message: "The otp provided is Invalid"})
+                        customToast({ message: "The otp provided is Invalid" })
                     }
                 } else {
-                    customToast({message: "The otp provided are wrong please try again"})
+                    customToast({ message: "The otp provided are wrong please try again" })
                 }
             } else {
-                customToast({message: "The password should atleast contain one uppercase one lower case 1 number and 1 special character"})
+                customToast({ message: "The password should atleast contain one uppercase one lower case 1 number and 1 special character" })
             }
         } else {
-            customToast({message: 'The passwords does not match one another please check'})
+            customToast({ message: 'The passwords does not match one another please check' })
         }
     }
 

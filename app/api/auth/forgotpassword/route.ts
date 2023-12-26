@@ -1,7 +1,6 @@
 import { db } from "@/lib/db"
 import axios from "axios"
 import * as argon2 from "argon2";
-import { sign } from "jsonwebtoken"
 import { NextResponse } from "next/server"
 
 

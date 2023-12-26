@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { useTheme } from "next-themes";
 import axios from 'axios'
 import { useCustomToast } from '@/components/custom/custom-toast'
+import { login } from "@/service/axios-services/dataFetching";
 
 export const SingInForm = () => {
 
@@ -21,15 +22,12 @@ export const SingInForm = () => {
     const handleLogin = async (e: any) => {
         try {
             e.preventDefault()
-
-            const request = await axios.post('api/auth/login', { mobile: mobile, password: password })
-            console.log("This is the request: ", request)
+            const request = await login({mobile, password})
             if (request?.status === 200) {
                 router.push('/')
             }
         } catch (error) {
             toast({message: 'Invalid Credentials Please try again'})
-            console.log("Error: ", error)
         }
     }
 

@@ -8,6 +8,7 @@ import toast from "react-hot-toast"
 import { useTheme } from "next-themes";
 import { Otptimer } from "otp-timer-ts";
 import { useCustomToast } from "@/components/custom/custom-toast"
+import { PatchUser, Sendotp, VerifyOtp } from "@/service/axios-services/dataFetching"
 
 interface OtpInterface {
     phoneNumber: string
@@ -49,10 +50,11 @@ export const OtpForm = ({
     // to verify the otp send
     const verifyOtp = async () => {
         try {
-            const response = await axios.post('/api/verify-otp', { phoneNumber: '+91' + phoneNumber, code: state.join('') });
+            const code = state.join('')
+            const response = await VerifyOtp(`+91${phoneNumber}`, code)
             console.log(response)
             if (response.status == 200) {
-                const verify = await axios.patch('/api/user', { verified: true, userId: userId })
+                const verify = await PatchUser(userId)
                 if (verify.status === 200) {
                     await toast.success('Your OTP has been verified', {
                         position: 'top-right',
@@ -70,7 +72,6 @@ export const OtpForm = ({
                 await customToast({ message: 'Invalid OTP please try again!!' })
                 return false
             }
-            setMessage(response.data.message);
 
         } catch (error: any) {
             await customToast({ message: 'Invalid OTP please try again!!' })
@@ -79,7 +80,7 @@ export const OtpForm = ({
 
     const handleResendToken = async () => {
         try {
-            const request = await axios.post('/api/send-otp', { phoneNumber: `+91${phoneNumber}` })
+            const request = await Sendotp({phoneNumber: `+91${phoneNumber}`})
             if (request.status == 200) {
                 await toast.success('Your OTP has been resend please check your mobile', {
                     position: 'top-right',

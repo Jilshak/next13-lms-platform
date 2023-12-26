@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import ResetPasswordForm from "./reset-pass-form";
 import Link from "next/link";
 import { useCustomToast } from "@/components/custom/custom-toast";
+import { ForgotPassword } from "@/service/axios-services/dataFetching";
 
 
 const ForgotPasswordForm = () => {
@@ -17,7 +18,6 @@ const ForgotPasswordForm = () => {
 
     const customToast = useCustomToast()
 
-    const theme = useTheme()
     const mobileRegex = /^\+91\d{10}$/; // corrected here
 
     const handleSendMobile = async (e: any) => {
@@ -26,15 +26,16 @@ const ForgotPasswordForm = () => {
             let new_number = '+91' + mobile
             const verify = mobileRegex.test(new_number)
             if (verify) {
-                const request = await axios.post('api/auth/forgotpassword', { mobile: mobile })
+                console.log("It is verified!!")
+                const request = await ForgotPassword(mobile)
                 if (request.status == 200) {
                     setToggle(true)
                 }
             } else {
-                customToast({message: 'There is something wrong with your mobile number!!! Please check again'})
+                customToast({ message: 'There is something wrong with your mobile number!!! Please check again' })
             }
         } catch (error) {
-            customToast({message: 'There is something wrong with your request!!! Please check again'})
+            customToast({ message: 'There is something wrong with your request!!! Please check again' })
         }
     }
 

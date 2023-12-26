@@ -8,6 +8,7 @@ import axios from 'axios';
 import toast from "react-hot-toast";
 import { useTheme } from "next-themes";
 import { useCustomToast } from "@/components/custom/custom-toast";
+import { CreateUser, Sendotp } from "@/service/axios-services/dataFetching";
 
 
 
@@ -48,19 +49,19 @@ export const SingUpForm = () => {
         const verify = handleInputFields()
         if (verify) {
             try {
-                const createUser = await axios.post('/api/user', { mobile: phoneNumber, username: username, password: password })
+                const createUser = await CreateUser({ mobile: phoneNumber, username: username, password: password })
                 if (createUser.status == 201) {
                     const userId = await createUser.data.user.id
                     await setUserId(userId)
-                    const request = await axios.post('/api/send-otp', { phoneNumber: `+91${phoneNumber}` });
+                    const request = await Sendotp({ phoneNumber: `+91${phoneNumber}` })
                     if (request.status == 200) {
                         verify && setToggle(!toggle)
                     } else {
-                        toast({message: "The otp service is down for the moment"})
+                        toast({ message: "The otp service is down for the moment" })
                     }
                 }
             } catch (error) {
-                toast({message: 'A user with the given phone number already exists!!'})
+                toast({ message: 'A user with the given phone number already exists!!' })
             }
         }
     }
