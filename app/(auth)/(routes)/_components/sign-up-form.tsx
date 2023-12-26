@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { OtpForm } from "./otp-form";
 import Link from "next/link";
-import axios from 'axios';
-import toast from "react-hot-toast";
 import { useTheme } from "next-themes";
 import { useCustomToast } from "@/components/custom/custom-toast";
 import { CreateUser, Sendotp } from "@/service/axios-services/dataFetching";
