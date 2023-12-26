@@ -1,6 +1,6 @@
 import { db } from "@/lib/db"
 import axios from "axios"
-import { hash } from "bcrypt"
+import * as argon2 from "argon2";
 import { sign } from "jsonwebtoken"
 import { NextResponse } from "next/server"
 
@@ -54,7 +54,7 @@ export async function PATCH(req: Request) {
             }, { status: 401 })
         }
 
-        const hashedPassword = await hash(password, 10);
+        const hashedPassword = await argon2.hash(password);
 
         // Update the user's password in the database
         const updatedUser = await db.user.update({
@@ -70,6 +70,6 @@ export async function PATCH(req: Request) {
         }
 
     } catch (error) {
-        // Handle error
+        console.log("Error: ", error)
     }
 }

@@ -1,11 +1,13 @@
 import { db } from "@/lib/db";
 import { compare, hash } from "bcrypt";
 import { serialize } from "cookie";
+import * as argon2 from "argon2";
 import { sign } from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
     try {
+        console.log("This is being called!!")
         const body = await req.json()
         const { mobile, password } = body
 
@@ -21,7 +23,12 @@ export async function POST(req: Request) {
             throw new Error('User or password is undefined');
         }
 
-        const passwordMatch = await compare(password, existingUserByMobile.password);
+
+        
+        const passwordMatch = await argon2.verify(existingUserByMobile.password, password);
+        console.log(passwordMatch)
+
+          
 
         if (!existingUserByMobile) {
             return NextResponse.json({
