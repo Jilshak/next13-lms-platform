@@ -1,34 +1,34 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import axios from "axios";
-import { useTheme } from "next-themes";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import ResetPasswordForm from "./reset-pass-form";
 import Link from "next/link";
 import { useCustomToast } from "@/components/custom/custom-toast";
 import { ForgotPassword } from "@/service/axios-services/dataFetching";
+import { validateMobile } from "@/components/validations";
+import { useSuccessToast } from "@/components/custom/success-toast";
 
 
 const ForgotPasswordForm = () => {
 
+    // for mobile and toggling the display
     const [mobile, setMobile] = useState<string>('')
     const [toggle, setToggle] = useState<boolean>(false)
 
+    // toasts
     const customToast = useCustomToast()
+    const successToast = useSuccessToast()
 
-    const mobileRegex = /^\+91\d{10}$/; // corrected here
 
+    // for mobile validation and sending otp to mobile --> forgot password flow
     const handleSendMobile = async (e: any) => {
         try {
             e.preventDefault()
-            let new_number = '+91' + mobile
-            const verify = mobileRegex.test(new_number)
-            if (verify) {
-                console.log("It is verified!!")
+            if (validateMobile(`+91${mobile}`)) {
                 const request = await ForgotPassword(mobile)
                 if (request.status == 200) {
+                    await successToast({message: 'Your otp has been send!!'})
                     setToggle(true)
                 }
             } else {

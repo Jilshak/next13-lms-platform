@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
         console.log("Its reaching up until here!!!", '+91' + mobile)
 
-        const request = await axios.post('http://localhost:3000/api/send-otp', { phoneNumber: `+91${mobile}` })
+        const request = await axios.post('http://localhost:3000/api/auth/send-otp', { phoneNumber: `+91${mobile}` })
 
         if (request.status == 200) {
             return NextResponse.json({
@@ -53,7 +53,9 @@ export async function PATCH(req: Request) {
             }, { status: 401 })
         }
 
-        const hashedPassword = await argon2.hash(password);
+        // added hashed passwrord for password updation
+        const salt = Buffer.from('this_is_static_salt');
+        const hashedPassword = await argon2.hash(password, { salt });
 
         // Update the user's password in the database
         const updatedUser = await db.user.update({

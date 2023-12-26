@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { OtpForm } from "./otp-form";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { useCustomToast } from "@/components/custom/custom-toast";
 import { CreateUser, Sendotp } from "@/service/axios-services/dataFetching";
+import { validateMobile, validatePassword } from "@/components/validations";
+import { useSuccessToast } from "@/components/custom/success-toast";
+
 
 
 
@@ -18,19 +20,19 @@ export const SingUpForm = () => {
     const [conformPassword, setConfirmPassword] = useState<string>('')
 
     const toast = useCustomToast()
+    const successToast = useSuccessToast()
 
     const [userId, setUserId] = useState<string>('');
-    const theme = useTheme();
 
     const [toggle, setToggle] = useState(false)
 
+
+    // for the validation of the input fields
     const handleInputFields = () => {
-        const mobileRegex = /^\+91\d{10}$/; // corrected here
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         if (username && phoneNumber && password === conformPassword) {
             let new_number = '+91' + phoneNumber
-            if (mobileRegex.test(new_number)) { // corrected here
-                if (passwordRegex.test(password)) {
+            if (validateMobile(new_number)) {
+                if (validatePassword(password)) {
                     return true
                 } else {
                     toast({ message: 'Your password does not follow the pattern required, it should have a capital, small, a number and a special character' })
@@ -43,6 +45,8 @@ export const SingUpForm = () => {
         }
     }
 
+
+    // for sending the otp
     const handleSendOTP = async (e: any) => {
         const verify = handleInputFields()
         if (verify) {
@@ -50,9 +54,11 @@ export const SingUpForm = () => {
                 const createUser = await CreateUser({ mobile: phoneNumber, username: username, password: password })
                 if (createUser.status == 201) {
                     const userId = await createUser.data.user.id
+                    console.log("this is the userId: ", userId)
                     await setUserId(userId)
                     const request = await Sendotp({ phoneNumber: `+91${phoneNumber}` })
                     if (request.status == 200) {
+                        await successToast({message: 'An otp has been send to your mobile number'})
                         verify && setToggle(!toggle)
                     } else {
                         toast({ message: "The otp service is down for the moment" })

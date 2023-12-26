@@ -25,7 +25,7 @@ interface createUserProps {
 // for creating a new user
 const CreateUser = async ({ mobile, username, password }: createUserProps) => {
     try {
-        const response = await apiService.post('api/user', { mobile: mobile, username: username, password: password })
+        const response = await apiService.post('api/auth/sign-up', { mobile: mobile, username: username, password: password })
         return response
     } catch (error) {
         console.error(error);
@@ -41,7 +41,7 @@ interface sendOtpProps {
 // for sending otp to a created user
 const Sendotp = async ({ phoneNumber }: sendOtpProps) => {
     try {
-        const response = await apiService.post('api/send-otp', { phoneNumber: phoneNumber })
+        const response = await apiService.post('api/auth/send-otp', { phoneNumber: phoneNumber })
         return response
     } catch (error) {
         console.error(error);
@@ -52,7 +52,7 @@ const Sendotp = async ({ phoneNumber }: sendOtpProps) => {
 // for verifying otp
 const VerifyOtp = async (phoneNumber: string, code: string) => {
     try {
-        const response = await apiService.post('/api/verify-otp', { phoneNumber: phoneNumber, code: code })
+        const response = await apiService.post('api/auth/verify-otp', { phoneNumber: phoneNumber, code: code })
         return response
     } catch (error) {
         console.log(error)
@@ -86,7 +86,7 @@ const ForgotPassword = async (mobile: string) => {
 
 const PatchUser = async (userId: string) => {
     try {
-        const response = await apiService.patch('/api/user', { userId: userId, verified: true })
+        const response = await apiService.patch('/api/auth/sign-up', { userId: userId })
         return response
     } catch (error) {
         console.log("Error: ", error)

@@ -22,10 +22,9 @@ export async function POST(req: Request) {
         }
 
 
-        // changed to argon hashing
+
         const salt = Buffer.from('this_is_static_salt');
         const hashedPassword = await argon2.hash(password, { salt });
-
 
         const newUser = await db.user.create({
             data: {
@@ -46,6 +45,44 @@ export async function POST(req: Request) {
     } catch (error) {
         NextResponse.json({
             message: 'something went wrong while doing this operation'
+        }, { status: 500 })
+    }
+}
+
+
+export async function PATCH(req: Request) {
+    try {
+        const body = await req.json()
+        const { userId } = body
+
+        console.log("This is the userId from the patch request: ", userId)
+        // check if user exists 
+        const existingUser = await db.user.findUnique({
+            where: { id: userId }
+        });
+
+
+        console.log("This si the existing user from the patch requst: ", existingUser)
+
+        if (!existingUser) {
+            return NextResponse.json({
+                message: "No User found with this ID"
+            }, { status: 404 })
+        }
+
+        // update user
+        await db.user.update({
+            where: { id: userId },
+            data: { verified: true } // set verified to true
+        })
+
+        return NextResponse.json({
+            message: "The user has been verified"
+        }, { status: 200 })
+
+    } catch (error) {
+        return NextResponse.json({
+            message: 'Something went wrong while doing this operation'
         }, { status: 500 })
     }
 }

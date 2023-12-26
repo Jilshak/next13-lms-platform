@@ -1,5 +1,4 @@
 import { db } from "@/lib/db";
-import { compare, hash } from "bcrypt";
 import { serialize } from "cookie";
 import * as argon2 from "argon2";
 import { sign } from "jsonwebtoken";
@@ -25,7 +24,6 @@ export async function POST(req: Request) {
 
         
         const passwordMatch = await argon2.verify(existingUserByMobile.password, password);
-        console.log(passwordMatch)
 
           
 
@@ -49,7 +47,7 @@ export async function POST(req: Request) {
             }
         )
 
-        if (passwordMatch && !existingUserByMobile.verified) {
+        if (passwordMatch && existingUserByMobile.verified) {
             const serialized = serialize('oursitejwt', token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',

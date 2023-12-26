@@ -4,11 +4,9 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import { useTheme } from "next-themes";
-import axios from 'axios'
 import { useCustomToast } from '@/components/custom/custom-toast'
 import { login } from "@/service/axios-services/dataFetching";
+import { validateMobile } from "@/components/validations";
 
 export const SingInForm = () => {
 
@@ -19,13 +17,19 @@ export const SingInForm = () => {
     const toast = useCustomToast()
 
 
+    // for logging in to the account
     const handleLogin = async (e: any) => {
         try {
             e.preventDefault()
-            const request = await login({mobile, password})
-            if (request?.status === 200) {
-                router.push('/')
+            if (validateMobile(`+91${mobile}`)){
+                const request = await login({mobile, password})
+                if (request?.status === 200) {
+                    router.push('/')
+                }
+            }else{
+                toast({message: 'Invalid Mobile entered Please try again!!!'})
             }
+            
         } catch (error) {
             toast({message: 'Invalid Credentials Please try again'})
         }
