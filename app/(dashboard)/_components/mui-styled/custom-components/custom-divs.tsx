@@ -51,6 +51,25 @@ export const CourseStyleCard = styled('div')(({ theme }: { theme: Theme }) => ({
 }));
 
 
+// new course Cards
+export const CustomCourseCard = styled('div')({
+  overflow: 'hidden',
+  border: '1px solid',
+  borderRadius: '4px',
+  padding: '16px',
+  height: '100%',
+  boxShadow: '0px 3px 5px 2px rgba(0, 0, 0, 0.3)',
+  transition: 'all 700ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+  '&:hover': {
+    transform: 'scale(1.10)',
+    boxShadow: '0px 3px 5px 2px rgba(0, 0, 0, 0.3)',
+  },
+  '@media (min-width:960px)': {
+    boxShadow: '0px 3px 5px 2px rgba(0, 0, 0, 0.3)',
+  },
+});
+
+
 
 
 
