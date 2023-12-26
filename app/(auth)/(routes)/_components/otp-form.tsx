@@ -36,10 +36,13 @@ export const OtpForm = ({
     const handleVerifyToken = async () => {
         const final_otp = state.join('')
         if (final_otp.length == 6) {
-            await verifyOtp()
-            router.push('sign-in')
+            const verify = await verifyOtp()
+            console.log(verify)
+            if (verify) {
+                router.push('sign-in')
+            }
         } else {
-            customToast({message: 'Some field of the OTP seems to be missing'})
+            customToast({ message: 'Some field of the OTP seems to be missing' })
         }
     }
 
@@ -51,23 +54,46 @@ export const OtpForm = ({
             if (response.status == 200) {
                 const verify = await axios.patch('/api/user', { verified: true, userId: userId })
                 if (verify.status === 200) {
-                    toast.success('Your OTP has been verified', {
+                    await toast.success('Your OTP has been verified', {
                         position: 'top-right',
                         className: 'dark:bg-[#141E36]  rounded-lg',
                         style: {
                             color: theme.theme == 'dark' ? '#fff' : '#000'
                         }
                     });
+                    return true
+                } else {
+                    await customToast({ message: 'Verification failed, please try again!!' })
+                    return false
                 }
             } else {
-                customToast({message: 'Invalid OTP please try again!!'})
+                await customToast({ message: 'Invalid OTP please try again!!' })
+                return false
             }
             setMessage(response.data.message);
 
         } catch (error: any) {
-            setMessage(error.response.data.message);
+            await customToast({ message: 'Invalid OTP please try again!!' })
         }
     };
+
+    const handleResendToken = async () => {
+        try {
+            const request = await axios.post('/api/send-otp', { phoneNumber: `+91${phoneNumber}` })
+            if (request.status == 200) {
+                await toast.success('Your OTP has been resend please check your mobile', {
+                    position: 'top-right',
+                    className: 'dark:bg-[#141E36]  rounded-lg',
+                    style: {
+                        color: theme.theme == 'dark' ? '#fff' : '#000'
+                    }
+                });
+            }
+        } catch (error) {
+            customToast({message: "Your otp couldn't be send due to some technial issue please try later!!"})
+        }
+    }
+
 
 
 
@@ -124,7 +150,7 @@ export const OtpForm = ({
                                     </div>
 
                                     <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
-                                        <p>Didn't recieve code?</p><Otptimer text="" onResend={handleVerifyToken} seconds={60} />
+                                        <p>Didn't recieve code?</p><Otptimer text="" onResend={handleResendToken} seconds={60} />
                                     </div>
                                     <div className="flex items-center justify-center">
                                         <Link href={`sign-in`}>
