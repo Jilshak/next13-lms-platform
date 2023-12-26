@@ -22,9 +22,9 @@ Key Features:
 - Video processing using Mux
 - HLS Video player using Mux
 - Rich text editor for chapter description
-- Authentication using Clerk
+- Authentication using twilio and jwt
 - ORM using Prisma
-- MySQL database using Planetscale
+- MySQL database using Railway
 
 ### Prerequisites
 
@@ -46,12 +46,11 @@ npm i
 
 
 ```js
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=
+TWILIO_AUTH_TOKEN=
+TWILIO_VERIFY_SERVICE_SID=
+TWILIO_ACCOUNT_SID=
+
+MY_SECRET_KEY =
 
 DATABASE_URL=
 
