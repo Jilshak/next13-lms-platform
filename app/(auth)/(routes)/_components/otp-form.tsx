@@ -3,11 +3,11 @@
 import Link from "next/link"
 import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
-import { useTheme } from "next-themes";
 import { Otptimer } from "otp-timer-ts";
 import { useCustomToast } from "@/components/custom/custom-toast"
-import { PatchUser, Sendotp, VerifyOtp } from "@/service/axios-services/dataFetching"
 import { useSuccessToast } from "@/components/custom/success-toast"
+import useVerifyOtp from "./custom-hooks/verifyOtp";
+import useResendOtp from "./custom-hooks/resendOtp";
 
 interface OtpInterface {
     phoneNumber: string
@@ -18,8 +18,6 @@ interface OtpInterface {
 
 export const OtpForm = ({
     phoneNumber,
-    username,
-    password,
     userId
 }: OtpInterface) => {
 
@@ -29,61 +27,20 @@ export const OtpForm = ({
 
     // for navigation
     const router = useRouter()
+    
+    // toast
+    const success = useSuccessToast();
+    const failed = useCustomToast();
 
-    // for toasts
-    const customToast = useCustomToast()
-    const successToast = useSuccessToast()
-
-
-    // function for verifying otp and sending it
-    const handleVerifyToken = async () => {
-        const final_otp = state.join('')
-        if (final_otp.length == 6) {
-            const verify = await verifyOtp()
-            if (verify) {
-                router.push('sign-in')
-            }
-        } else {
-            customToast({ message: 'Some field of the OTP seems to be missing' })
-        }
+    // for otp verification and resending
+    const handleSubmit = async () => {
+        await useVerifyOtp(state, phoneNumber, userId, success, failed, router)
     }
-
-    // to verify the otp send
-    const verifyOtp = async () => {
-        try {
-            const code = state.join('')
-            const response = await VerifyOtp(`+91${phoneNumber}`, code)
-            if (response.status == 200) {
-                const verify = await PatchUser(userId)
-                if (verify.status === 200) {
-                    await successToast({message: 'Your OTP has been verified'})
-                    return true
-                } else {
-                    await customToast({ message: 'Verification failed, please try again!!' })
-                    return false
-                }
-            } else {
-                await customToast({ message: 'Invalid OTP please try again!!' })
-                return false
-            }
-        } catch (error: any) {
-            await customToast({ message: 'Invalid OTP please try again!!' })
-        }
-    };
 
     // for resending the otp if didn't received
     const handleResendToken = async () => {
-        try {
-            const request = await Sendotp({phoneNumber: `+91${phoneNumber}`})
-            if (request.status == 200) {
-                await successToast({message: 'Your OTP has been resend please check your mobile'})
-            }
-        } catch (error) {
-            customToast({message: "Your otp couldn't be send due to some technial issue please try later!!"})
-        }
+        await useResendOtp(phoneNumber, success, failed)
     }
-
-
 
     // for getting the entered input and focusing on the next field
     const handleChange = (e: any, i: any) => {
@@ -133,7 +90,7 @@ export const OtpForm = ({
 
                                 <div className="flex flex-col space-y-5">
                                     <div>
-                                        <button onClick={handleVerifyToken} className="flex flex-row items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+                                        <button onClick={handleSubmit} className="flex flex-row items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
                                             Verify Account
                                         </button>
                                     </div>

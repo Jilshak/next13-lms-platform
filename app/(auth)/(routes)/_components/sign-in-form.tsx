@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useCustomToast } from '@/components/custom/custom-toast'
 import { login } from "@/service/axios-services/dataFetching";
 import { validateMobile } from "@/components/validations";
+import useLogin from "./custom-hooks/loginHook";
 
 export const SingInForm = () => {
 
@@ -17,23 +18,11 @@ export const SingInForm = () => {
     const toast = useCustomToast()
 
 
-    // for logging in to the account
+     // for logging in to the account
     const handleLogin = async (e: any) => {
-        try {
-            e.preventDefault()
-            if (validateMobile(`+91${mobile}`)){
-                const request = await login({mobile, password})
-                if (request?.status === 200) {
-                    router.push('/')
-                }
-            }else{
-                toast({message: 'Invalid Mobile entered Please try again!!!'})
-            }
-            
-        } catch (error) {
-            toast({message: 'Invalid Credentials Please try again'})
-        }
+        await useLogin(mobile, password, toast, router)
     }
+
 
     return (
         <>

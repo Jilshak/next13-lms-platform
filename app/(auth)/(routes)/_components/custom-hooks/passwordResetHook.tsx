@@ -1,0 +1,35 @@
+import { validateOtp, validatePassword } from '@/components/validations';
+import { VerifyOtp, UpdatePassword } from '@/service/axios-services/dataFetching';
+
+const usePasswordReset = (password: string, confirmPassword: string, code: string, mobile: string, success: any, failed: any, push: any) => {
+    const handlePasswordReset = async (e: any) => {
+        e.preventDefault()
+        
+        if (password === confirmPassword) {
+            if (validatePassword(password)) {
+                if (code && validateOtp(code)) { 
+                    const response = await VerifyOtp(`+91${mobile}`, code)
+                    if (response.status == 200) {
+                        const update_password = await UpdatePassword(mobile, password)
+                        if (update_password.status == 200) {
+                            await success({message: 'Your Password has been reset!!'})
+                            push('sign-in')
+                        }
+                    } else {
+                        failed({ message: "The otp provided is Invalid" })
+                    }
+                } else {
+                    failed({ message: "The otp provided are wrong please try again" })
+                }
+            } else {
+                failed({ message: "The password should atleast contain one uppercase one lower case 1 number and 1 special character" })
+            }
+        } else {
+            failed({ message: 'The passwords does not match one another please check' })
+        }
+    }
+
+    return { handlePasswordReset };
+};
+
+export default usePasswordReset;

@@ -7,6 +7,7 @@ import { validatePassword, validateOtp } from "@/components/validations";
 import { UpdatePassword, VerifyOtp } from "@/service/axios-services/dataFetching";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import usePasswordReset from "./custom-hooks/passwordResetHook";
 
 interface ResetPasswrodProps {
     mobile: string
@@ -31,30 +32,7 @@ const ResetPasswordForm = ({
 
     // function for resetting the password
     const handlePasswordReset = async (e: any) => {
-        e.preventDefault()
-        
-        if (password === confirmPassword) {
-            if (validatePassword(password)) {
-                if (code && validateOtp(code)) { 
-                    const response = await VerifyOtp(`+91${mobile}`, code)
-                    if (response.status == 200) {
-                        const update_password = await UpdatePassword(mobile, password)
-                        if (update_password.status == 200) {
-                            await successToast({message: 'Your Password has been reset!!'})
-                            push('sign-in')
-                        }
-                    } else {
-                        customToast({ message: "The otp provided is Invalid" })
-                    }
-                } else {
-                    customToast({ message: "The otp provided are wrong please try again" })
-                }
-            } else {
-                customToast({ message: "The password should atleast contain one uppercase one lower case 1 number and 1 special character" })
-            }
-        } else {
-            customToast({ message: 'The passwords does not match one another please check' })
-        }
+        await usePasswordReset(password, confirmPassword, code, mobile, successToast, customToast, push)
     }
 
     return (
