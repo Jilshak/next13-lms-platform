@@ -13,10 +13,6 @@ export default async function Dashboard() {
     return redirect("/");
   }
 
-  // const {
-  //   completedCourses,
-  //   coursesInProgress
-  // } = await getDashboardCourses(userId);
 
   const dashboardItems = DashboardItems
 

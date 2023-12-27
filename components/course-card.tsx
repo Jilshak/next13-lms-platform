@@ -1,3 +1,5 @@
+'use client'
+
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
@@ -5,6 +7,10 @@ import { BookOpen } from "lucide-react";
 import { IconBadge } from "@/components/icon-badge";
 import { formatPrice } from "@/lib/format";
 import { CourseProgress } from "@/components/course-progress";
+import { StyledCourseCard } from "@/styles/cards/styledCourseCard";
+import { useTheme } from "next-themes";
+
+
 
 interface CourseCardProps {
   id: string;
@@ -25,9 +31,16 @@ export const CourseCard = ({
   progress,
   category
 }: CourseCardProps) => {
+
+  const theme = useTheme()
   return (
     <Link href={`/courses/${id}`}>
-      <div className="group hover:shadow-sm overflow-hidden border rounded-lg p-3 h-full shadow-lg transition-all duration-700 hover:scale-110 dark:shadow-sm dark:shadow-white dark:bg-[#05112A]">
+      <StyledCourseCard
+        bg={theme.theme == 'dark' ? '#05112A' : '#f7f4f4'}
+        hover={theme.theme == 'dark' ? '#05112A' : '#f7f4f4'}
+        color={theme.theme == 'dark' ? '#fff' : '#000000'}
+      >
+
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
           <Image
             fill
@@ -63,7 +76,7 @@ export const CourseCard = ({
             </p>
           )}
         </div>
-      </div>
+      </StyledCourseCard>
     </Link>
   )
 }

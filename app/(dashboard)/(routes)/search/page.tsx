@@ -27,11 +27,6 @@ const SearchPage =  ({
     return redirect("/");
   }
 
-  // const categories = await db.category.findMany({
-  //   orderBy: {
-  //     name: "asc"
-  //   }
-  // });
 
 
   return (

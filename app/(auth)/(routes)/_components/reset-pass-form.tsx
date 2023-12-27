@@ -1,12 +1,11 @@
 "use client"
 
 import { useCustomToast } from "@/components/custom/custom-toast";
+import { useSuccessToast } from "@/components/custom/success-toast";
 import { Button } from "@/components/ui/button";
-import { UpdatePassword, VerifyOtp } from "@/service/axios-services/dataFetching";
-import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import usePasswordReset from "./custom-hooks/passwordResetHook";
 
 interface ResetPasswrodProps {
     mobile: string
@@ -16,47 +15,22 @@ const ResetPasswordForm = ({
     mobile,
 }: ResetPasswrodProps) => {
 
-    const theme = useTheme()
+    // for navigation
     const { push } = useRouter()
 
+    // for toasts
     const customToast = useCustomToast()
+    const successToast = useSuccessToast()
 
+    // password and otp states
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
     const [code, setCode] = useState<string>('')
 
+
+    // function for resetting the password
     const handlePasswordReset = async (e: any) => {
-        e.preventDefault()
-        const otpRegex = /^\d{6}$/;
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (password === confirmPassword) {
-            if (passwordRegex.test(password)) {
-                if (code && otpRegex.test(code)) {
-                    const verify_otp = await VerifyOtp(`+91${mobile}`, code)
-                    if (verify_otp.status == 200) {
-                        const update_password = await UpdatePassword(mobile, password)
-                        if (update_password.status == 200) {
-                            await toast.success('Your Password has been reset!!', {
-                                position: 'top-right',
-                                className: 'dark:bg-[#141E36]  rounded-lg',
-                                style: {
-                                    color: theme.theme == 'dark' ? '#fff' : '#000'
-                                }
-                            });
-                            push('sign-in')
-                        }
-                    } else {
-                        customToast({ message: "The otp provided is Invalid" })
-                    }
-                } else {
-                    customToast({ message: "The otp provided are wrong please try again" })
-                }
-            } else {
-                customToast({ message: "The password should atleast contain one uppercase one lower case 1 number and 1 special character" })
-            }
-        } else {
-            customToast({ message: 'The passwords does not match one another please check' })
-        }
+        await usePasswordReset(password, confirmPassword, code, mobile, successToast, customToast, push, e)
     }
 
     return (

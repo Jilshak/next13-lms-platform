@@ -1,71 +1,41 @@
 "use client"
 
+import { useTheme } from 'next-themes'; // replace with your actual theme provider
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { OtpForm } from "./otp-form";
 import Link from "next/link";
-import axios from 'axios';
-import toast from "react-hot-toast";
-import { useTheme } from "next-themes";
 import { useCustomToast } from "@/components/custom/custom-toast";
-import { CreateUser, Sendotp } from "@/service/axios-services/dataFetching";
+import { useSuccessToast } from "@/components/custom/success-toast";
+import useSendOtp from "./custom-hooks/sign-up-form/sendOtpHook";
+import { SignInStyled } from '@/styles/Sign-In-Styled/signIn-styled';
+
 
 
 
 export const SingUpForm = () => {
 
+    // for users credentials
     const [username, setUsername] = useState<string>('')
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [password, setPassword] = useState<string>('')
-    const [conformPassword, setConfirmPassword] = useState<string>('')
+    const [confirmPassword, setConfirmPassword] = useState<string>('')
 
+    // toast
     const toast = useCustomToast()
+    const successToast = useSuccessToast()
 
+    // toggle and id
     const [userId, setUserId] = useState<string>('');
-    const theme = useTheme();
+    const [toggle, setToggle] = useState<boolean>(false)
 
-    const [toggle, setToggle] = useState(false)
+    const theme = useTheme()
 
-    const handleInputFields = () => {
-        const mobileRegex = /^\+91\d{10}$/; // corrected here
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (username && phoneNumber && password === conformPassword) {
-            let new_number = '+91' + phoneNumber
-            if (mobileRegex.test(new_number)) { // corrected here
-                if (passwordRegex.test(password)) {
-                    return true
-                } else {
-                    toast({ message: 'Your password does not follow the pattern required, it should have a capital, small, a number and a special character' })
-                }
-            } else {
-                toast({ message: 'There seem to be something wrong with your mobile number please check again' })
-            }
-        } else {
-            toast({ message: 'either the passwords are not matching or the username field and mobile fields are empty' })
-        }
-    }
-
+    // for sending the otp for the user
     const handleSendOTP = async (e: any) => {
-        const verify = handleInputFields()
-        if (verify) {
-            try {
-                const createUser = await CreateUser({ mobile: phoneNumber, username: username, password: password })
-                if (createUser.status == 201) {
-                    const userId = await createUser.data.user.id
-                    await setUserId(userId)
-                    const request = await Sendotp({ phoneNumber: `+91${phoneNumber}` })
-                    if (request.status == 200) {
-                        verify && setToggle(!toggle)
-                    } else {
-                        toast({ message: "The otp service is down for the moment" })
-                    }
-                }
-            } catch (error) {
-                toast({ message: 'A user with the given phone number already exists!!' })
-            }
-        }
+        e.preventDefault()
+        await useSendOtp(username, phoneNumber, password, confirmPassword, successToast, toast, setUserId, toggle, setToggle)
     }
-
 
     return (
         <>
@@ -127,16 +97,25 @@ export const SingUpForm = () => {
 
                             <div className="mt-6">
                                 <span className="block w-full rounded-md shadow-sm">
-                                    <Button onClick={handleSendOTP} className="w-full bg-blue-500 hover:bg-blue-600 dark:bg-[#0369A1] dark:hover:bg-[#00264D] dark:text-white">
+                                    <SignInStyled
+                                        onClick={(e) => handleSendOTP(e)}
+                                        bg={theme.theme == 'dark' ? '#3772f2' : '#2f67e0'}
+                                        hover={theme.theme == 'dark' ? '#00264D' : '#1b56d6'}
+                                    >
                                         Send Otp
-                                    </Button>
+                                    </SignInStyled>
                                 </span>
                                 <span className="block w-full rounded-md shadow-sm mt-2">
                                     <Link href={`sign-in`}>
-                                        <Button className="w-full dark:text-white bg-green-500 hover:bg-green-600 dark:dark:bg-gray-600 dark:hover:bg-slate-700">
+                                        <SignInStyled
+                                            bg={theme.theme == 'dark' ? '#9d9fa5' : 'rgb(34 197 94 / var(--tw-bg-opacity))'}
+                                            hover={theme.theme == 'dark' ? '#737477' : '#1f9e58'}
+                                        >
                                             Already have an account? Login
-                                        </Button>
+                                        </SignInStyled>
                                     </Link>
+
+
                                 </span>
 
                             </div>
