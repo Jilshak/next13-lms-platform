@@ -26,8 +26,6 @@ const useSendOtp = (username: string, phoneNumber: string, password: string, con
     }
 
     handleSendOTP()
-
-    return {  };
 };
 
 export default useSendOtp;

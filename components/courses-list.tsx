@@ -3,7 +3,6 @@
 import { Category, Course } from "@prisma/client";
 
 import { CourseCard } from "@/components/course-card";
-import { GridComponent } from "@/app/(dashboard)/_components/mui-styled/custom-components/custom-divs";
 
 type CourseWithProgressWithCategory = Course & {
   category: Category | null;
