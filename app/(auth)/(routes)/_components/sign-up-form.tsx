@@ -19,9 +19,11 @@ export const SingUpForm = () => {
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
 
+    // toast
     const toast = useCustomToast()
     const successToast = useSuccessToast()
 
+    // toggle and id
     const [userId, setUserId] = useState<string>('');
     const [toggle, setToggle] = useState(false)
 

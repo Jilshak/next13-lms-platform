@@ -2,9 +2,8 @@ import { validateMobile } from '@/components/validations';
 import { login } from '@/service/axios-services/dataFetching';
 
 const useLogin = (mobile: string, password: string,  failed: any, router: any) => {
-    const handleLogin = async (e: any) => {
+    const handleLogin = async () => {
         try {
-            e.preventDefault()
             if (validateMobile(`+91${mobile}`)){
                 const request = await login({mobile, password})
                 if (request?.status === 200) {
@@ -19,7 +18,9 @@ const useLogin = (mobile: string, password: string,  failed: any, router: any) =
         }
     }
 
-    return { handleLogin };
+    handleLogin()
+
+    return {  };
 };
 
 export default useLogin;
