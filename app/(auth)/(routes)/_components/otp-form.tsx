@@ -33,7 +33,8 @@ export const OtpForm = ({
     const failed = useCustomToast();
 
     // for otp verification and resending
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: any) => {
+        e.preventDefault()
         await useVerifyOtp(state, phoneNumber, userId, success, failed, router)
     }
 
@@ -90,7 +91,7 @@ export const OtpForm = ({
 
                                 <div className="flex flex-col space-y-5">
                                     <div>
-                                        <button onClick={handleSubmit} className="flex flex-row items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+                                        <button onClick={(e) => handleSubmit(e)} className="flex flex-row items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
                                             Verify Account
                                         </button>
                                     </div>

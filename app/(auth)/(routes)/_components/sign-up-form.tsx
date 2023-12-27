@@ -1,5 +1,6 @@
 "use client"
 
+import { useTheme } from 'next-themes'; // replace with your actual theme provider
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { OtpForm } from "./otp-form";
@@ -7,6 +8,7 @@ import Link from "next/link";
 import { useCustomToast } from "@/components/custom/custom-toast";
 import { useSuccessToast } from "@/components/custom/success-toast";
 import useSendOtp from "./custom-hooks/sign-up-form/sendOtpHook";
+import { SignInStyled } from '@/styles/Sign-In-Styled/signIn-styled';
 
 
 
@@ -25,11 +27,14 @@ export const SingUpForm = () => {
 
     // toggle and id
     const [userId, setUserId] = useState<string>('');
-    const [toggle, setToggle] = useState(false)
+    const [toggle, setToggle] = useState<boolean>(false)
+
+    const theme = useTheme()
 
     // for sending the otp for the user
-    const handleSendOTP = async () => {
-        await useSendOtp(username,phoneNumber, password, confirmPassword, successToast, toast, setUserId, toggle, setToggle)
+    const handleSendOTP = async (e: any) => {
+        e.preventDefault()
+        await useSendOtp(username, phoneNumber, password, confirmPassword, successToast, toast, setUserId, toggle, setToggle)
     }
 
     return (
@@ -92,16 +97,25 @@ export const SingUpForm = () => {
 
                             <div className="mt-6">
                                 <span className="block w-full rounded-md shadow-sm">
-                                    <Button onClick={handleSendOTP} className="w-full bg-blue-500 hover:bg-blue-600 dark:bg-[#0369A1] dark:hover:bg-[#00264D] dark:text-white">
+                                    <SignInStyled
+                                        onClick={(e) => handleSendOTP(e)}
+                                        bg={theme.theme == 'dark' ? '#3772f2' : '#2f67e0'}
+                                        hover={theme.theme == 'dark' ? '#00264D' : '#1b56d6'}
+                                    >
                                         Send Otp
-                                    </Button>
+                                    </SignInStyled>
                                 </span>
                                 <span className="block w-full rounded-md shadow-sm mt-2">
                                     <Link href={`sign-in`}>
-                                        <Button className="w-full dark:text-white bg-green-500 hover:bg-green-600 dark:dark:bg-gray-600 dark:hover:bg-slate-700">
+                                        <SignInStyled
+                                            bg={theme.theme == 'dark' ? '#9d9fa5' : 'rgb(34 197 94 / var(--tw-bg-opacity))'}
+                                            hover={theme.theme == 'dark' ? '#737477' : '#1f9e58'}
+                                        >
                                             Already have an account? Login
-                                        </Button>
+                                        </SignInStyled>
                                     </Link>
+
+
                                 </span>
 
                             </div>

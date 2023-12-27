@@ -5,9 +5,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCustomToast } from '@/components/custom/custom-toast'
-import { login } from "@/service/axios-services/dataFetching";
-import { validateMobile } from "@/components/validations";
 import useLogin from "./custom-hooks/loginHook";
+import { SignInStyled } from "@/styles/Sign-In-Styled/signIn-styled";
+import { useTheme } from 'next-themes'; // replace with your actual theme provider
+
 
 export const SingInForm = () => {
 
@@ -17,10 +18,12 @@ export const SingInForm = () => {
 
     const toast = useCustomToast()
 
+    const theme = useTheme()
 
-     // for logging in to the account
+
+    // for logging in to the account
     const handleLogin = async (e: any) => {
-        await useLogin(mobile, password, toast, router)
+        await useLogin(mobile, password, toast, router, e)
     }
 
 
@@ -80,23 +83,36 @@ export const SingInForm = () => {
 
                             <div className="mt-6">
                                 <span className="block w-full rounded-md shadow-sm">
-                                    <Button onClick={(e) => handleLogin(e)} className="w-full dark:text-white bg-blue-500 hover:bg-blue-600 dark:bg-[#0369A1] dark:hover:bg-[#00264D]">
+                                    {/* <Button onClick={(e) => handleLogin(e)} className="w-full dark:text-white bg-blue-500 hover:bg-blue-600 dark:bg-[#0369A1] dark:hover:bg-[#00264D]">
                                         Login
-                                    </Button>
+                                    </Button> */}
+                                    <SignInStyled
+                                        onClick={(e) => handleLogin(e)}
+                                        bg={theme.theme == 'dark' ? '#3772f2' : '#2f67e0'}
+                                        hover={theme.theme == 'dark' ? '#00264D' : '#1b56d6'}
+                                    >
+                                        Login
+                                    </SignInStyled>
                                 </span>
                                 <span className="block w-full rounded-md shadow-sm my-3">
                                     <Link href='sign-up'>
-                                        <Button className="w-full dark:text-white bg-green-500 hover:bg-green-600 dark:bg-gray-600 dark:hover:bg-gray-700">
+                                        <SignInStyled
+                                            bg={theme.theme == 'dark' ? '#9d9fa5' : 'rgb(34 197 94 / var(--tw-bg-opacity))'}
+                                            hover={theme.theme == 'dark' ? '#737477' : '#1f9e58'}
+                                        >
                                             Register
-                                        </Button>
+                                        </SignInStyled>
                                     </Link>
+
                                 </span>
+
+
                             </div>
                         </form>
 
                     </div>
-                </div>
-            </div>
+                </div >
+            </div >
         </>
     )
 }

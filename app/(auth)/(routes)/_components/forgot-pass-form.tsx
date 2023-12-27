@@ -22,6 +22,7 @@ const ForgotPasswordForm = () => {
 
     // for mobile validation and sending otp to mobile --> forgot password flow
     const handleSendToMobile = async (e:any) => {
+        e.preventDefault()
        await useSendToMobile(mobile, successToast, customToast, setToggle )
     }
 

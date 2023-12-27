@@ -3,8 +3,6 @@
 import { useCustomToast } from "@/components/custom/custom-toast";
 import { useSuccessToast } from "@/components/custom/success-toast";
 import { Button } from "@/components/ui/button";
-import { validatePassword, validateOtp } from "@/components/validations";
-import { UpdatePassword, VerifyOtp } from "@/service/axios-services/dataFetching";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import usePasswordReset from "./custom-hooks/passwordResetHook";
@@ -32,7 +30,7 @@ const ResetPasswordForm = ({
 
     // function for resetting the password
     const handlePasswordReset = async (e: any) => {
-        await usePasswordReset(password, confirmPassword, code, mobile, successToast, customToast, push)
+        await usePasswordReset(password, confirmPassword, code, mobile, successToast, customToast, push, e)
     }
 
     return (

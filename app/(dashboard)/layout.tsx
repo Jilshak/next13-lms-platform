@@ -6,6 +6,8 @@ import { Sidebar } from "./_components/sidebar";
 import { motion, AnimatePresence } from "framer-motion"
 
 
+
+
 const DashboardLayout = ({
   children
 }: {
@@ -17,10 +19,10 @@ const DashboardLayout = ({
       <AuthProvider>
         <AnimatePresence>
           <motion.div
-           initial={{ y: 100, opacity: 0 }}
-           animate={{ y: 0, opacity: 1 }}
-           exit={{ y: -100, opacity: 0 }}
-           transition={{ type: 'easeInOut', duration: 0.8 }}
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -100, opacity: 0 }}
+            transition={{ type: 'easeInOut', duration: 0.8 }}
           >
 
             <div className="h-full ">

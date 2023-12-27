@@ -1,9 +1,9 @@
 import { validateOtp, validatePassword } from '@/components/validations';
 import { VerifyOtp, UpdatePassword } from '@/service/axios-services/dataFetching';
 
-const usePasswordReset = (password: string, confirmPassword: string, code: string, mobile: string, success: any, failed: any, push: any) => {
-    const handlePasswordReset = async () => {
-        
+const usePasswordReset = (password: string, confirmPassword: string, code: string, mobile: string, success: any, failed: any, push: any, e:any) => {
+    const handlePasswordReset = async (e:any) => {
+        e.preventDefault()
         if (password === confirmPassword) {
             if (validatePassword(password)) {
                 if (code && validateOtp(code)) { 
@@ -28,7 +28,7 @@ const usePasswordReset = (password: string, confirmPassword: string, code: strin
         }
     }
 
-    handlePasswordReset()
+    handlePasswordReset(e)
 
     return {  };
 };

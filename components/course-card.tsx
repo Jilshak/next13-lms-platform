@@ -28,7 +28,7 @@ export const CourseCard = ({
 }: CourseCardProps) => {
   return (
     <Link href={`/courses/${id}`}>
-      <CustomCourseCard>
+      <div className="group hover:shadow-sm overflow-hidden border rounded-lg p-3 h-full shadow-lg transition-all duration-700 hover:scale-110 dark:shadow-sm dark:shadow-white dark:bg-[#05112A]">
 
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
           <Image
@@ -65,7 +65,7 @@ export const CourseCard = ({
             </p>
           )}
         </div>
-      </CustomCourseCard>
+      </div>
     </Link>
   )
 }

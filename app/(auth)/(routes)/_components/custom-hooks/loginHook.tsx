@@ -1,9 +1,10 @@
 import { validateMobile } from '@/components/validations';
 import { login } from '@/service/axios-services/dataFetching';
 
-const useLogin = (mobile: string, password: string,  failed: any, router: any) => {
-    const handleLogin = async () => {
+const useLogin = (mobile: string, password: string,  failed: any, router: any, e: any) => {
+    const handleLogin = async (e: any) => {
         try {
+            e.preventDefault()
             if (validateMobile(`+91${mobile}`)){
                 const request = await login({mobile, password})
                 if (request?.status === 200) {
@@ -18,7 +19,7 @@ const useLogin = (mobile: string, password: string,  failed: any, router: any) =
         }
     }
 
-    handleLogin()
+    handleLogin(e)
 
     return {  };
 };
