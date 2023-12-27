@@ -2,9 +2,8 @@ import { validateMobile } from '@/components/validations';
 import { ForgotPassword } from '@/service/axios-services/dataFetching';
 
 const useSendToMobile = (mobile: string, success: any, failed: any, setToggle: any) => {
-    const handleSendMobile = async (e: any) => {
+    const handleSendMobile = async () => {
         try {
-            e.preventDefault()
             if (validateMobile(`+91${mobile}`)) {
                 const request = await ForgotPassword(mobile)
                 if (request.status == 200) {
@@ -19,7 +18,7 @@ const useSendToMobile = (mobile: string, success: any, failed: any, setToggle: a
         }
     }
 
-    return { handleSendMobile };
+    handleSendMobile()
 };
 
 export default useSendToMobile;
